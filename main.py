@@ -21,18 +21,16 @@ class LocalFileAdapter(requests.adapters.HTTPAdapter):
         return self.build_response_from_file(request)
 
 
+# setup of BeautifulSoup and html parsing
 requests_session = requests.session()
 requests_session.mount('file://', LocalFileAdapter())
 r = requests_session.get('file://dripsvpply.html')
-
 soup = BeautifulSoup(r.text, 'html.parser')
 results = soup.find_all('div', attrs={'class':'chatlog__message-group'})
 print("Number of results in page:", len(results), "\n")
 
-first_result = results[0]
 
-# keywords = ['half', 'half o', 'half oz', 'half os', 'oz', 'os', 'ounce', '1/2', 'full', 'fulls'
-#             'Half', 'Half o', 'Half O', 'Half oz', 'Half Oz', 'Half OZ', 'Half os', 'Half Os', 'Half OS', 'Os', 'OS', 'Oz', 'OZ', 'Ounce', 'OUNCE', 'Full', 'Fulls']
+# populate keywords list from file
 keywords = []
 keywords_file = open("keywords.txt")
 key = ""
@@ -70,30 +68,3 @@ for result in results:
 
 
 print("Collected ", result_count, " result/s")
-
-
-
-
-
-
-
-
-
-
-
-####First result
-# print(first_result.contents[3], "\n------\n")
-# username_chunk = first_result.contents[3].find('span')
-# message_chunk = first_result.contents[3].find('div')
-#
-# username = username_chunk.contents[0]
-# message = message_chunk.find('div').find('div').contents[0]
-# message_id = message_chunk.contents[1]
-# date = first_result.contents[3].contents[3].contents[0]
-# print("Date: ", date)
-# print("Username: ", username)
-# print("Message: ", message)
-
-
-
-#first_result.contents[3].contents[5]
